@@ -1,0 +1,23 @@
+1 - Esquema universidade
+1.1 Liste a matrícula do professor (mat_professor), a maior e a menor nota dada, e a
+média de notas agrupado pela matrícula do professor, entre todas as suas turmas que ele
+leciona.
+1.2 Liste o nome da disciplina (nome) e a média de notas das turmas, agrupado por
+disciplina (somente as disciplinas que tiverem notas), porém, somente daquelas disciplinas
+que são pré-requsito.
+1.3 Liste o nome da disciplina (nome), código do pré-requisito (pre_req) e número de
+alunos em cada turma, agrupado pela disciplina.
+1.4 Liste o nome do departamento responsável (nome) e média das notas das turmas,
+agrupado pelo código do departamento responsável.
+1.5 Liste o maior e o menor salário agrupado por departamento.
+1.6 Liste a matrícula do professor (mat_professor) e código do departamento
+(departamento) dos professores que lecionam turmas com menos de 7 alunos.
+1.7 Liste o primeiro nome, sobrenome do estudante e a média de notas, agrupado por
+cada estudante, porém somente das turmas de disciplinas que o departamento responsável
+é o DCOMP.
+2 - Esquema Hospital
+2.1 Listar a especialidade e a soma dos salários dos médicos por especialidade, porém
+somente as especialidades, que somadas, ultrapassam o valor de 20 mil reais.
+2.2 Listar a especialidade e a soma dos salários dos médicos docentes, porém somente
+as especialidades, que somadas, ultrapassam o valor de 15 mil reais.
+2.3 Listar a quantidade de médicos por especialidade.
