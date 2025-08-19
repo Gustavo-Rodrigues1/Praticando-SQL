@@ -1,47 +1,125 @@
 1 - Esquema universidade
 1.1 Liste o nome das disciplinas que possuem turmas. - INNER JOIN
 
-SELECT DISTINCT nome FROM universidade.disciplina as d JOIN universidade.turma as t ON (d.cod_disc = t.cod_disc)
+SELECT
+  DISTINCT nome
+FROM universidade.disciplina as d
+JOIN universidade.turma as t ON (d.cod_disc = t.cod_disc)
 
 1.2 Liste o primeiro nome e sobrenome do estudante e o nome de cada disciplina das
 turmas que ele está cursando. - INNER JOIN
 
-SELECT u.primeiro_nome, u.sobrenome, d.nome FROM universidade.disciplina as d JOIN universidade.turma as t ON (d.cod_disc = t.cod_disc) JOIN universidade.cursa as c ON (t.id_turma = c.id_turma) JOIN universidade.estudante as e ON (e.mat_estudante = c.mat_estudante) JOIN universidade.usuario as u ON (e.cpf = u.cpf)
+SELECT
+  u.primeiro_nome,
+  u.sobrenome,
+  d.nome
+FROM universidade.disciplina as d
+JOIN universidade.turma as t ON (d.cod_disc = t.cod_disc)
+JOIN universidade.cursa as c ON (t.id_turma = c.id_turma)
+JOIN universidade.estudante as e ON (e.mat_estudante = c.mat_estudante) JOIN universidade.usuario as u ON (e.cpf = u.cpf)
 
 1.3 Liste o primeiro nome e sobrenome do aluno e o primeiro nome e sobrenome de seu
 orientador. - INNER JOIN
 
-SELECT ue.primeiro_nome, ue.sobrenome, up.primeiro_nome, up.sobrenome FROM universidade.plano as o JOIN universidade.professor as p ON (o.mat_professor = p.mat_professor) JOIN universidade.usuario as up ON (up.cpf = p.cpf) JOIN universidade.estudante as e ON (e.mat_estudante = o.mat_estudante) JOIN universidade.usuario as ue ON (ue.cpf = e.cpf)
+SELECT
+  ue.primeiro_nome,
+  ue.sobrenome,
+  up.primeiro_nome,
+  up.sobrenome
+FROM universidade.plano as o 
+JOIN universidade.professor as p ON (o.mat_professor = p.mat_professor) JOIN universidade.usuario as up ON (up.cpf = p.cpf) 
+JOIN universidade.estudante as e ON (e.mat_estudante = o.mat_estudante) JOIN universidade.usuario as ue ON (ue.cpf = e.cpf)
 
 1.4 Considerando todas as turmas, liste o primeiro nome e sobrenome do professor, o
 nome da disciplina que ele está lecionando, além disso liste o primeiro nome e sobrenome
 de todos os alunos cursando essas turmas. - INNER JOIN
 
-SELECT up.primeiro_nome, up.sobrenome, d.nome, ue.primeiro_nome, ue.sobrenome FROM universidade.leciona as l JOIN universidade.professor as p ON (l.mat_professor = p.mat_professor) JOIN universidade.usuario as up ON (up.cpf = p.cpf) JOIN universidade.turma as t ON (t.id_turma = l.id_turma) JOIN universidade.disciplina as d ON (t.cod_disc = d.cod_disc) JOIN universidade.cursa as c ON (c.id_turma = t.id_turma) JOIN universidade.estudante as e ON (c.mat_estudante = e.mat_estudante) JOIN universidade.usuario as ue ON (e.cpf = ue.cpf)
+SELECT
+  up.primeiro_nome,
+  up.sobrenome,
+  d.nome,
+  ue.primeiro_nome,
+  ue.sobrenome
+FROM universidade.leciona as l 
+JOIN universidade.professor as p ON (l.mat_professor = p.mat_professor) JOIN universidade.usuario as up ON (up.cpf = p.cpf) 
+JOIN universidade.turma as t ON (t.id_turma = l.id_turma) 
+JOIN universidade.disciplina as d ON (t.cod_disc = d.cod_disc) 
+JOIN universidade.cursa as c ON (c.id_turma = t.id_turma) 
+JOIN universidade.estudante as e ON (c.mat_estudante = e.mat_estudante) JOIN universidade.usuario as ue ON (e.cpf = ue.cpf)
 
 1.5 Liste o nome da disciplina e o nome do seu pré-requisito. - INNER JOIN
 
-SELECT d.nome, p.nome
+SELECT
+  d.nome,
+  p.nome
 FROM universidade.disciplina as d JOIN universidade.disciplina as p ON (d.pre_req = p.cod_disc)
 
 1.6 Liste o primeiro nome e sobrenome do professor e o primeiro nome e sobrenome do
 seu chefe. - INNER JOIN
+
+SELECT
+  up.primeiro_nome,
+  up.sobrenome,
+  uc.primeiro_nome,
+  uc.sobrenome
+FROM universidade.professor as p 
+JOIN universidade.usuario as up ON (up.cpf = p.cpf) 
+JOIN universidade.departamento as d ON (p.departamento =  d.cod_depto ) JOIN universidade.professor as c ON (c.mat_professor = d.chefe) 
+JOIN universidade.usuario as uc ON (uc.cpf = c.cpf) 
+WHERE p.mat_professor <> c.mat_professor
+
 1.7 Liste o nome da disciplina, turma e primeiro nome e sobrenome do professor, das
 disciplinas que não são pré-requisito - OUTER JOIN
+
+SELECT
+  pr.nome,
+  t.cod_disc,
+  u.primeiro_nome,
+  u.sobrenome
+FROM universidade.disciplina as d
+RIGHT JOIN universidade.disciplina as pr ON (d.pre_req = pr.cod_disc) JOIN universidade.turma as t ON (pr.cod_disc = t.cod_disc)
+JOIN universidade.leciona as l ON (t.id_turma = l.id_turma)
+JOIN universidade.professor as p ON (p.mat_professor = l.mat_professor)
+JOIN universidade.usuario as u ON (u.cpf = p.cpf) WHERE d.cod_disc IS NULL
+
 1.8 Liste o primeiro nome e sobrenome de todos os alunos e primeiro nome e
 sobrenome do orientador, inclusive os alunos sem orientador. - OUTER JOIN
+
+
+
 1.9 Liste o primeiro nome e sobrenome de todos os professores e o primeiro nome e
 sobrenome de seus orientandos (alunos que são orientados), inclusive os professores sem
 orientandos. - OUTER JOIN
+
+
+
 1.10 Liste o primeiro nome e sobrenome de todos alunos e o primeiro nome e sobrenome
 dos professores, independente da orientação. - OUTER JOIN
+
+
+
 1.11 Liste o primeiro nome e sobrenome dos professores que não lecionam turmas. -
 OUTER JOIN
+
+
+
 1.12 Liste o nome das disciplinas das turmas que não tem alunos cursando. - OUTER
 JOIN
+
+
+
 1.13 Refaça a consulta 1.7 da atividade 4, usando OUTER JOIN - OUTER JOIN
+
+
+
 1.14 Refaça a consulta 1.8 da atividade 4, usando JOIN - INNER JOIN
+
+
+
 1.15 Refaça a consulta 1.9 da atividade 4, usando OUTER JOIN - OUTER JOIN
+
+
+
 
 2 - Esquema - hospital/clinica (Há questões para usar o comando LIKE nesse exercício)
 2.1 Listar o CPF e sobrenome de todos os usuários que possuem a sílaba “sa" em seu
