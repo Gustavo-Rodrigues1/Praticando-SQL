@@ -139,15 +139,68 @@ WHERE chefe IS NULL
 2 - Esquema - hospital/clinica (Há questões para usar o comando LIKE nesse exercício)
 2.1 Listar o CPF e sobrenome de todos os usuários que possuem a sílaba “sa" em seu
 sobrenome.
+
+SELECT u.cpf, u.sobrenome
+FROM hospital.usuario u
+WHERE sobrenome ILIKE '%sa%'
+
 2.2 Listar a quantidade de pessoas que possuem sobrenome com a inicial “S”.
+
+SELECT count(sobrenome)
+FROM hospital.usuario u
+WHERE sobrenome ILIKE 'S%'
+
 2.3 Listar o nome e CPF de todos os pacientes. - INNER JOIN
+
+SELECT u.primeironome, u.sobrenome, u.cpf
+FROM hospital.usuario u
+JOIN hospital.paciente p USING(cpf);
+
+SELECT u.primeironome, u.sobrenome, u.cpf
+FROM hospital.usuario u
+NATURAL JOIN hospital.paciente p;
+
 2.4 Listar a soma de todos os salários dos médicos, porém apenas os que possuem
 cadastro ativo. - INNER JOIN
+
+SELECT sum(m.salario)
+FROM hospital.medico AS m
+NATURAL JOIN hospital.usuario AS u
+NATURAL JOIN hospital.perfil AS p
+WHERE p.ativo='S'
+
 2.5 Listar o nome e CPF dos pacientes, seguido do nome e CPF dos seus acompanhantes.
 - INNER JOIN
 
+SELECT up.primeironome, up.sobrenome, up.cpf, ua.primeironome, ua.sobrenome, ua.cpf
+FROM hospital.paciente p
+JOIN hospital.usuario up ON(up.cpf = p.cpf)
+JOIN hospital.acompanhante a ON (p.cpfacomp = a.cpf)
+JOIN hospital.usuario ua ON(ua.cpf = a.cpf)
+
 2.6 Listar o nome e CPF de todos os pacientes que realizaram consulta. - INNER JOIN
+
+SELECT DISTINCT u.primeironome, u.sobrenome, u.cpf
+FROM hospital.usuario u 
+JOIN hospital.paciente p USING(cpf)
+JOIN hospital.consulta c USING(numprontuario)
+
 2.7 Listar o nome, CPF e número de prontuário de todos os pacientes que realizaram
 consulta e não houve prescrição de medicamento. - OUTER JOIN
+
+SELECT u.primeironome, u.sobrenome, u.cpf, pac.numprontuario
+FROM hospital.paciente pac
+JOIN hospital.usuario u ON (u.cpf = pac.cpf)
+JOIN hospital.consulta c ON (c.numprontuario = pac.numprontuario)
+LEFT JOIN hospital.prescricao pre ON (pre.numprontuario = c.numprontuario)
+WHERE pre.idConsultaPrescricao IS NULL;
+
 2.8 Listar o nome, CPF, número de prontuário e o nome do medicamento de todos os
 pacientes que realizaram consulta e houve prescrição de medicamento. - OUTER JOIN
+
+SELECT u.primeironome, u.sobrenome, u.cpf, pac.numprontuario, m.nome
+FROM hospital.paciente pac
+JOIN hospital.usuario u ON (u.cpf = pac.cpf)
+JOIN hospital.consulta c ON (c.numprontuario = pac.numprontuario)
+JOIN hospital.prescricao pre ON (pre.numprontuario = c.numprontuario)
+JOIN hospital.medicamento m ON (m.idMedicamento = pre.idMedicamento)
