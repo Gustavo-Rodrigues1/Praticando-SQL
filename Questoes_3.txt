@@ -34,15 +34,68 @@ GROUP BY t.id_turma, d.cod_disc;
 
 1.4 Liste o nome do departamento responsável (nome) e média das notas das turmas,
 agrupado pelo código do departamento responsável.
+
+SELECT dep.nome, avg(nota) 
+FROM disciplina dis
+JOIN departamento dep ON (dis.depto_responsavel = dep.cod_depto)
+JOIN turma tu ON (tu.cod_disc = dis.cod_disc)
+JOIN cursa cu ON (cu.id_turma = tu.id_turma)
+GROUP BY dep.cod_depto;
+
 1.5 Liste o maior e o menor salário agrupado por departamento.
+
+SELECT max(salario), min(salario)
+FROM professor pro
+JOIN cargo car ON (pro.cargo = car.id_cargo)
+GROUP BY departamento;
+
 1.6 Liste a matrícula do professor (mat_professor) e código do departamento
 (departamento) dos professores que lecionam turmas com menos de 7 alunos.
+
+SELECT mat_professor, departamento
+FROM professor pro
+JOIN leciona lec USING (mat_professor)
+JOIN turma tu USING (id_turma)
+JOIN cursa cu USING (id_turma)
+GROUP BY id_turma,mat_professor
+HAVING count(mat_estudante) < 7;
+
 1.7 Liste o primeiro nome, sobrenome do estudante e a média de notas, agrupado por
 cada estudante, porém somente das turmas de disciplinas que o departamento responsável
 é o DCOMP.
+
+SELECT primeiro_nome,sobrenome , avg(nota)
+FROM estudante est
+JOIN usuario us USING (cpf)
+JOIN cursa cu USING (mat_estudante)
+JOIN turma tu USING (id_turma)
+JOIN disciplina USING (cod_disc)
+WHERE depto_responsavel = 'DCOMP'
+GROUP BY mat_estudante, primeiro_nome, sobrenome
+
 2 - Esquema Hospital
+
+SET search_path TO hospital;
+
 2.1 Listar a especialidade e a soma dos salários dos médicos por especialidade, porém
 somente as especialidades, que somadas, ultrapassam o valor de 20 mil reais.
+
+SELECT especialidade, sum(salario)
+FROM medico
+GROUP BY especialidade
+HAVING sum(salario) > 20000
+
 2.2 Listar a especialidade e a soma dos salários dos médicos docentes, porém somente
 as especialidades, que somadas, ultrapassam o valor de 15 mil reais.
+
+SELECT especialidade, sum(salario)
+FROM medico
+JOIN medico_docente USING (idRegistro)
+GROUP BY especialidade
+HAVING sum(salario) > 15000;
+
 2.3 Listar a quantidade de médicos por especialidade.
+
+SELECT especialidade, count(*)
+FROM medico
+GROUP BY especialidade
