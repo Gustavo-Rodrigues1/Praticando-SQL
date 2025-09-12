@@ -3,10 +3,28 @@
 1.1 Liste a matrícula do estudante (mat_estudante) de todos os estudantes que são
 orientados pelo professor P200 e que estão cursando alguma turma em que o professor
 P500 leciona.
+
+SELECT mat_estudante 
+FROM plano pl 
+WHERE mat_professor = 'P200' AND mat_estudante IN (SELECT mat_estudante FROM cursa c JOIN turma t ON (c.id_turma = 
+t.id_turma) 
+JOIN leciona l ON (l.id_turma = t.id_turma) 
+WHERE mat_professor = 'P500') 
+
 1.2 - Liste a matrícula de todos os professores que não orientam alunos ou que são
 chefes de algum departamento.
+
+SELECT mat_professor
+FROM professor
+WHERE mat_professor NOT IN (SELECT mat_professor FROM plano) OR mat_professor IN (SELECT chefe FROM departamento WHERE chefe IS NOT NULL)
+
 1.3 - Liste a matrícula de todos os professores que orientam algum aluno e que são
 chefes de algum departamento.
+
+SELECT DISTINCT mat_professor
+FROM plano
+WHERE mat_professor IN (SELECT chefe FROM departamento WHERE chefe IS NOT NULL)
+
 1.4 - Liste a matrícula de todos os professores que não orientam alunos e que não são
 chefes de algum departamento.
 1.5 - Liste a menor média de salários dentre todos os departamentos
